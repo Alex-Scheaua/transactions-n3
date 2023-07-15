@@ -1,0 +1,20 @@
+version: '3.5'
+
+
+services:
+  postgres:
+    container_name: transactions-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: transactions-db
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-db:/data/transactions-db
+    ports:
+      - "4001:5432"
+
+volumes:
+  postgres-db:
+    driver: local
