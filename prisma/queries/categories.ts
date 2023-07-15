@@ -1,4 +1,5 @@
-import { prisma } from "../prismaClient.js";
+import {prisma} from "../prismaClient.js";
+
 export const getCategories = () => {
-    return prisma.category.findMany()
+  return prisma.category.findMany()
 }

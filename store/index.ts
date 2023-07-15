@@ -1,20 +1,16 @@
-import { defineStore } from 'pinia'
-import {
-  loadTransactions,
-  loadAccounts,
-  loadCategories,
-  loadBanks
-} from "~/services/networkRequests"
+import {defineStore} from 'pinia'
+import {loadAccounts, loadBanks, loadCategories, loadTransactions} from "~/services/networkRequests"
 
 import type {
-  Id,
-  Transaction,
-  Category,
   Account,
   Bank,
+  Category,
+  Id,
+  Transaction,
   TransactionFilterFields,
   TransactionFilterFieldSearch
 } from "~/interfaces"
+
 interface State {
   transactions: Transaction[]
   selectedTransaction: Transaction | {}
@@ -25,6 +21,7 @@ interface State {
   loading: boolean
   lastBatch: boolean
 }
+
 export const useStore = defineStore('store', {
   state: () => (<State>{
     transactions: [],
@@ -48,16 +45,6 @@ export const useStore = defineStore('store', {
     loading: false,
     lastBatch: false
   }),
-  // getters: {
-  //   getTransactions: (state: State) => state.transactions,
-  //   getSelectedTransaction: (state: State) => state.selectedTransaction,
-  //   getCategories: (state: State) => state.categories,
-  //   getAccounts: (state: State) => state.accounts,
-  //   getBanks: (state: State) => state.banks,
-  //   getFilters: (state: State) => state.filters,
-  //   getLoading: (state: State) => state.loading,
-  //   getLastBatch: (state: State) => state.lastBatch,
-  // },
 
   actions: {
     async nuxtServerInit() {
@@ -70,7 +57,7 @@ export const useStore = defineStore('store', {
     async getTransactions(loadMore: boolean = false) {
       this.loading = true
       try {
-        if(this.filters.bank) {
+        if (this.filters.bank) {
           this.filters.banks = this.banks.find((bank: Bank) => bank.name === this.filters.bank)?.ids || []
         }
 
@@ -81,7 +68,7 @@ export const useStore = defineStore('store', {
         const transactionsList = await loadTransactions(filters)
 
         this.transactions = loadMore ? [...this.transactions, ...transactionsList] : transactionsList
-        this.filters.cursor = transactionsList.length ? transactionsList[transactionsList.length-1].id : ''
+        this.filters.cursor = transactionsList.length ? transactionsList[transactionsList.length - 1].id : ''
         this.lastBatch = transactionsList.length < 20
       } catch (e) {
         console.error(e)
@@ -132,7 +119,7 @@ export const useStore = defineStore('store', {
         console.error(e)
       }
     },
-    setFilter({key, value}: {key: 'bank'| 'account' | 'sort', value: string}) {
+    setFilter({key, value}: { key: 'bank' | 'account' | 'sort', value: string }) {
       this.filters[key] = value
     },
     setSearch(search: TransactionFilterFieldSearch) {
