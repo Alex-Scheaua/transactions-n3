@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import type {Account, Category} from "~/interfaces"
 import debounce from "~/services/debounce";
 import {useStore} from "~/store";

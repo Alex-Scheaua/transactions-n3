@@ -26,9 +26,9 @@
           
           <div class="text-right col-span-1 font-semibold">Category:</div>
           <div class="col-span-2">
-           <span :style="selectedColor" class="px-2 py-1 rounded-md">
-               {{ selectedCategory?.name }}
-           </span>
+         <span :style="selectedColor" class="px-2 py-1 rounded-md">
+             {{ selectedCategory?.name }}
+         </span>
           </div>
           
           <div class="text-right col-span-1 font-semibold">Bank:</div>
@@ -42,54 +42,32 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {Account, Category, Transaction} from "~/interfaces";
 import {useStore} from "~/store";
 import {ComputedRef} from "vue";
 
-export default {
-  transition: {
-    name: 'modal',
-    mode: 'in-out'
-  },
-  setup() {
-    const route = ref(useRoute())
-    const store = useStore()
-    
-    const selectedTransaction = computed(() => store.selectedTransaction) as ComputedRef<Transaction>
-    const accounts = computed(() => store.accounts)
-    const categories = computed(() => store.categories)
-    
-    const selectedCategory = computed(() => categories.value.find((category: Category) => category.id === selectedTransaction.value.categoryId))
-    const selectedColor = computed(() => {
-      if (selectedCategory.value?.color) {
-        return {'background-color': `#${selectedCategory.value.color}99`}
-      }
-    })
-    const selectedAccount = computed(() => accounts.value.find((account: Account) => account.id === selectedTransaction.value.accountId))
-    
-    onMounted(() => {
-      store.getSelectedTransaction(route.value.params.id)
-    })
-    
-    watch(route, () => {
-      return route.value.params.id && store.getSelectedTransaction(route.value.params.id)
-    })
-    
-    return {route, selectedTransaction, selectedAccount, selectedCategory, selectedColor}
-  }
-}
+const route = ref(useRoute())
+const store = useStore()
 
+const selectedTransaction = computed(() => store.selectedTransaction) as ComputedRef<Transaction>
+const accounts = computed(() => store.accounts)
+const categories = computed(() => store.categories)
+
+const selectedCategory = computed(() => categories.value.find((category: Category) => category.id === selectedTransaction.value.categoryId))
+const selectedColor = computed(() => {
+  if (selectedCategory.value?.color) {
+    return {'background-color': `#${selectedCategory.value.color}99`}
+  }
+})
+const selectedAccount = computed(() => accounts.value.find((account: Account) => account.id === selectedTransaction.value.accountId))
+
+onMounted(() => {
+  store.getSelectedTransaction(route.value.params.id)
+})
+
+watch(route, () => {
+  return route.value.params.id && store.getSelectedTransaction(route.value.params.id)
+})
 </script>
 
-<style scoped>
-.modal-enter-active, .modal-leave-active {
-  transition: transform .5s, opacity .5s;
-}
-
-.modal-enter, .modal-leave-to /* .fade-leave-active below version 2.1.8 */
-{
-  transform: scale(0);
-  opacity: 0;
-}
-</style>
