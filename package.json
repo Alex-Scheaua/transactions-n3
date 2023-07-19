@@ -11,6 +11,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "setup": "yarn -i && yarn compose && yarn migrate-and-seed",
     "compose": "docker-compose -f ./compose-db.yml up -d",
     "migrate-and-seed": "node migrate-db.js && npx prisma db seed"
   },

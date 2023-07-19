@@ -27,26 +27,21 @@ interface CategoryRow {
 const dbFilesUrl = 'https://raw.githubusercontent.com/Alex-Scheaua/transactions-demo/master/db/data'
 
 const handleTransactions = async () => {
-  console.log("Seeding Database. This may take ~5 minutes. Please wait...")
+  console.log("Seeding Database. This may take a few minutes. Please wait...")
   return new Promise<void>(async resolve => {
-    https.get(`${dbFilesUrl}/transactions.csv`, stream => {
+    https.get(`${dbFilesUrl}/transactions.csv`, (stream: any) => {
       stream
         .pipe(csv({
-          headers: ['id', 'accountId', 'categoryId', 'reference', 'amount', 'currency', 'date'],
-          skipLines: 1
+          headers: ['id', 'accountId', 'categoryId', 'reference', 'amount', 'currency', 'date'], skipLines: 1
         }))
         .on('data', async (row: TransactionRow) => {
           await prisma.transaction.upsert({
             where: {
               id: row.id
+            }, update: {}, create: {
+              ...row, amount: parseFloat(String(row.amount)), date: new Date(row.date),
             },
-            update: {},
-            create: {
-              ...row,
-              amount: parseFloat(String(row.amount)),
-              date: new Date(row.date),
-            },
-          }).catch(error => {
+          }).catch((_: any) => {
           })
         })
         .on('end', () => {
@@ -58,24 +53,20 @@ const handleTransactions = async () => {
 
 const handleAccounts = async () => {
   return new Promise<void>((resolve) => {
-    https.get(`${dbFilesUrl}/accounts.csv`, stream => {
+    https.get(`${dbFilesUrl}/accounts.csv`, (stream: any) => {
       stream
         .pipe(csv({
-          headers: ['id', 'name', 'bank'],
-          skipLines: 1
+          headers: ['id', 'name', 'bank'], skipLines: 1
         }))
         .on('data', async (row: AccountRow) => {
           const idKey = Object.keys(row)[0] as "id"
           row = {
-            ...row,
-            id: row[idKey],
+            ...row, id: row[idKey],
           }
           await prisma.account.upsert({
             where: {
               id: row.id
-            },
-            update: {},
-            create: row,
+            }, update: {}, create: row,
           })
         })
         .on('end', () => {
@@ -87,19 +78,16 @@ const handleAccounts = async () => {
 
 const handleCategories = async () => {
   return new Promise<void>((resolve) => {
-    https.get(`${dbFilesUrl}/categories.csv`, stream => {
+    https.get(`${dbFilesUrl}/categories.csv`, (stream: any) => {
       stream
         .pipe(csv({
-          headers: ['id', 'name', 'color'],
-          skipLines: 1
+          headers: ['id', 'name', 'color'], skipLines: 1
         }))
         .on('data', async (row: CategoryRow) => {
           await prisma.category.upsert({
             where: {
               id: row.id
-            },
-            update: {},
-            create: row,
+            }, update: {}, create: row,
           })
         })
         .on('end', () => {
