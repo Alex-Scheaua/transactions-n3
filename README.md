@@ -1,63 +1,28 @@
-# Nuxt 3 Minimal Starter
+# Transactions Demo
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Transactions Demo is a POC of an app where you can see a large list of bank transactions
+## Prerequisites
+- yarn
+- node v16
+- docker daemon started
 
-## Setup
+## Installation
+It`s as simple as (hopefully :) ):
+```bash
+yarn setup
+```
+This will:
+- Install all the node_modules needed for the app to start
 
-Make sure to install the dependencies:
+- Create a postgresql database in a docker container.
+
+- Migrate and seed the database with the .csv files from github. (*Notice that the files are not downloaded, but parsed directly from the github source)
+
+The whole process should take less than 5 minutes.
+
+## Usage
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
+yarn start
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+By default the app will be available on http://localhost:3000 (Backend is by default on :4000)
